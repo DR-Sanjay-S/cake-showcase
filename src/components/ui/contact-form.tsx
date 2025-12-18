@@ -112,9 +112,16 @@ export const ContactForm = () => {
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-cream mb-4">
             Book Your Order
           </h2>
-          <p className="text-cream/70 max-w-md mx-auto">
+          <p className="text-cream/70 max-w-md mx-auto mb-4">
             Have a special occasion? Let us create the perfect cake for you. Fill out the form below and we'll get back to you shortly.
           </p>
+          <a 
+            href="tel:8951227039" 
+            className="inline-flex items-center gap-2 text-plum hover:text-plum-dark transition-colors font-semibold"
+          >
+            <Phone size={18} />
+            Call us: 8951227039
+          </a>
         </motion.div>
 
         <motion.form
