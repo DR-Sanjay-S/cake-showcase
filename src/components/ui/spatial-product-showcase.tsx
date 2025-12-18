@@ -155,20 +155,15 @@ const BackgroundGradient = ({ isLeft }: { isLeft: boolean }) => (
 
 const ProductVisual = ({ data, isLeft }: { data: ProductData; isLeft: boolean }) => (
   <motion.div layout="position" className="relative group shrink-0">
-    {/* Animated Rings */}
-    <motion.div
-      animate={{ rotate: 360 }}
-      transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-      className={`absolute inset-[-20%] rounded-full border border-dashed border-cream/20 ${data.colors.ring}`}
-    />
+    {/* Glow Effect */}
     <motion.div
       animate={{ scale: [1, 1.05, 1] }}
       transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-      className={`absolute inset-0 rounded-full bg-gradient-to-br ${data.colors.gradient} blur-2xl opacity-40`}
+      className={`absolute inset-0 rounded-full bg-gradient-to-br ${data.colors.gradient} blur-3xl opacity-30`}
     />
 
     {/* Image Container */}
-    <div className="relative h-80 w-80 md:h-[450px] md:w-[450px] rounded-full border border-cream/10 shadow-2xl flex items-center justify-center overflow-hidden bg-cream/5 backdrop-blur-sm">
+    <div className="relative h-80 w-80 md:h-[450px] md:w-[450px] flex items-center justify-center">
       <motion.div
         animate={{ y: [-10, 10, -10] }}
         transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
@@ -183,7 +178,11 @@ const ProductVisual = ({ data, isLeft }: { data: ProductData; isLeft: boolean })
             initial="initial"
             animate="animate"
             exit="exit"
-            className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] p-4"
+            className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] p-8 scale-110"
+            style={{
+              maskImage: 'radial-gradient(ellipse 55% 55% at center, black 40%, transparent 70%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 55% 55% at center, black 40%, transparent 70%)',
+            }}
             draggable={false}
           />
         </AnimatePresence>
@@ -322,15 +321,10 @@ export default function CakeShowcase() {
       
       {/* Header */}
       <header className="absolute top-0 left-0 right-0 z-20 p-6 md:p-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex items-center justify-center">
           <h1 className="text-2xl md:text-3xl font-serif font-bold text-cream">
             Cakes & Tales
           </h1>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-cream/70">
-            <a href="#" className="hover:text-cream transition-colors">Menu</a>
-            <a href="#" className="hover:text-cream transition-colors">Our Story</a>
-            <a href="#" className="hover:text-cream transition-colors">Contact</a>
-          </nav>
         </div>
       </header>
 
