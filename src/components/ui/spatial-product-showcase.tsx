@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
-  Cake,
   ChevronRight,
   Heart,
   Sparkles,
@@ -32,7 +31,6 @@ export interface ProductData {
   title: string;
   description: string;
   image: string;
-  price: string;
   colors: {
     gradient: string;
     glow: string;
@@ -52,7 +50,6 @@ const PRODUCT_DATA: Record<ProductId, ProductData> = {
     title: 'Royal Plum Delight',
     description: 'Our signature plum cake infused with the finest seasonal plums, aged rum, and a hint of cinnamon. A timeless classic for celebrations.',
     image: plumCakeImg,
-    price: '$45',
     colors: {
       gradient: 'from-plum to-plum-dark',
       glow: 'bg-plum',
@@ -70,7 +67,6 @@ const PRODUCT_DATA: Record<ProductId, ProductData> = {
     title: 'Velvet Dream Cupcake',
     description: 'Fluffy vanilla sponge topped with our signature rose-tinted buttercream swirl. Perfect for gifting or treating yourself.',
     image: cupcakeImg,
-    price: '$6',
     colors: {
       gradient: 'from-rose-400 to-rose-600',
       glow: 'bg-rose-400',
@@ -189,16 +185,6 @@ const ProductVisual = ({ data, isLeft }: { data: ProductData; isLeft: boolean })
       </motion.div>
     </div>
 
-    {/* Price Tag */}
-    <motion.div
-      layout="position"
-      className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap"
-    >
-      <div className="flex items-center gap-2 text-sm font-bold text-cream bg-bakery-dark/90 px-6 py-3 rounded-full border border-cream/10 backdrop-blur shadow-lg">
-        <Cake size={16} className="text-plum" />
-        <span className="text-xl">{data.price}</span>
-      </div>
-    </motion.div>
   </motion.div>
 );
 
