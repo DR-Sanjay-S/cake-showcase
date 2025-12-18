@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   ChevronRight,
@@ -251,44 +251,56 @@ const ProductDetails = ({ data, isLeft }: { data: ProductData; isLeft: boolean }
 
 const Switcher = ({ 
   activeId, 
-  onToggle 
+  onToggle,
+  visible = true
 }: { 
   activeId: ProductId; 
-  onToggle: (id: ProductId) => void 
+  onToggle: (id: ProductId) => void;
+  visible?: boolean;
 }) => {
   const options = Object.values(PRODUCT_DATA).map(p => ({ id: p.id, label: p.label }));
 
   return (
-    <div className="fixed bottom-12 inset-x-0 flex justify-center z-50 pointer-events-none">
-      <motion.div layout className="pointer-events-auto flex items-center gap-1 p-1.5 rounded-full bg-bakery-dark/90 backdrop-blur-2xl border border-cream/10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] ring-1 ring-cream/5">
-        {options.map((opt) => (
-          <motion.button
-            key={opt.id}
-            onClick={() => onToggle(opt.id)}
-            whileTap={{ scale: 0.96 }}
-            className="relative w-28 h-12 rounded-full flex items-center justify-center text-sm font-medium focus:outline-none"
-          >
-            {activeId === opt.id && (
-              <motion.div
-                layoutId="island-surface"
-                className="absolute inset-0 rounded-full bg-gradient-to-b from-cream/10 to-cream/5 shadow-inner"
-                transition={{ type: 'spring', stiffness: 220, damping: 22 }}
-              />
-            )}
-            <span className={`relative z-10 transition-colors duration-300 ${activeId === opt.id ? 'text-cream' : 'text-cream/50 hover:text-cream/70'}`}>
-              {opt.label}
-            </span>
-            {activeId === opt.id && (
-              <motion.span
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="absolute -bottom-1 h-1 w-6 rounded-full bg-gradient-to-r from-transparent via-plum to-transparent"
-              />
-            )}
-          </motion.button>
-        ))}
-      </motion.div>
-    </div>
+    <AnimatePresence>
+      {visible && (
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          transition={{ duration: 0.3 }}
+          className="fixed bottom-12 inset-x-0 flex justify-center z-50 pointer-events-none"
+        >
+          <motion.div layout className="pointer-events-auto flex items-center gap-1 p-1.5 rounded-full bg-bakery-dark/90 backdrop-blur-2xl border border-cream/10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] ring-1 ring-cream/5">
+            {options.map((opt) => (
+              <motion.button
+                key={opt.id}
+                onClick={() => onToggle(opt.id)}
+                whileTap={{ scale: 0.96 }}
+                className="relative w-28 h-12 rounded-full flex items-center justify-center text-sm font-medium focus:outline-none"
+              >
+                {activeId === opt.id && (
+                  <motion.div
+                    layoutId="island-surface"
+                    className="absolute inset-0 rounded-full bg-gradient-to-b from-cream/10 to-cream/5 shadow-inner"
+                    transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+                  />
+                )}
+                <span className={`relative z-10 transition-colors duration-300 ${activeId === opt.id ? 'text-cream' : 'text-cream/50 hover:text-cream/70'}`}>
+                  {opt.label}
+                </span>
+                {activeId === opt.id && (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="absolute -bottom-1 h-1 w-6 rounded-full bg-gradient-to-r from-transparent via-plum to-transparent"
+                  />
+                )}
+              </motion.button>
+            ))}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
@@ -298,6 +310,19 @@ const Switcher = ({
 
 export default function CakeShowcase() {
   const [activeSide, setActiveSide] = useState<ProductId>('plum');
+  const [showSwitcher, setShowSwitcher] = useState(true);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      // Hide switcher when scrolled past 70% of first viewport
+      setShowSwitcher(scrollY < windowHeight * 0.7);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   
   const currentData = PRODUCT_DATA[activeSide];
   const isLeft = activeSide === 'plum';
@@ -338,7 +363,7 @@ export default function CakeShowcase() {
         </motion.div>
       </main>
 
-      <Switcher activeId={activeSide} onToggle={setActiveSide} />
+      <Switcher activeId={activeSide} onToggle={setActiveSide} visible={showSwitcher} />
     </div>
   );
 }
